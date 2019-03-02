@@ -204,6 +204,12 @@ function AntForest(robot, options) {
                 times++;
                 this.back();
                 sleep(1500);
+                this.back();
+                sleep(1500);
+                this.back();
+                sleep(1500);
+                this.back();
+                sleep(1500);
                 this.openApp();
             }
         } while (times < this.options.max_retry_times);
