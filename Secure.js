@@ -162,8 +162,8 @@ function NativeSecure(secure) {
         } else if (id("com.android.systemui:id/pinEntry").exists()) {
             return this.unlockKey(password, len);
         } else {
-            toastLog("识别锁定方式失败，型号：" + device.brand + " " + device.product + " " + device.release);
-            return this.checkUnlock();
+            toastLog("识别锁定方式失败，采用默认解锁方式，型号：" + device.brand + " " + device.product + " " + device.release);
+            return this.unlockKey(password, len);
         }
     };
 
@@ -218,8 +218,8 @@ function MIUISecure(secure) {
         } else if (id("com.android.keyguard:id/numeric_inputview").exists()) {
             return this.unlockKey(password, len);
         } else {
-            toastLog("识别锁定方式失败，型号：" + device.brand + " " + device.product + " " + device.release);
-            return this.checkUnlock();
+            toastLog("识别锁定方式失败，采用默认解锁方式，型号：" + device.brand + " " + device.product + " " + device.release);
+            return this.unlockKey(password, len);
         }
     };
 
