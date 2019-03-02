@@ -355,7 +355,7 @@ function AntForest(robot, options) {
 
                             return selector.findOne().visibleToUser();*/
                             page++;
-                            return (page > this.options.max_swipe_times) 
+                            return (page >= this.options.max_swipe_times) 
                             || (findColorEquals(this.capture, "#30BF6C", WIDTH - 300, 0, 200, HEIGHT) !== null);
                         }.bind(this));
                         this.addTotal(total_list, add_total_list);
@@ -373,7 +373,7 @@ function AntForest(robot, options) {
                         }
                         min_minute = minuteList[0];
                         log("当前最小剩余" + min_minute + "分钟");
-                        if (min_minute > this.options.check_within_time) {
+                        if (min_minute >= this.options.check_within_time) {
                             break;
                         }
                         swipe_sleep = 300;
@@ -382,7 +382,7 @@ function AntForest(robot, options) {
                         page = 0;
                         add_total_list = this.takeOthers(icon_list, swipe_sleep, function () {
                             page++;
-                            return (page > this.options.max_swipe_times) 
+                            return (page >= this.options.max_swipe_times) 
                             || (findColorEquals(this.capture, "#EFAE44", 0, 0, 110, HEIGHT / 2) !== null);
                         }.bind(this), "prev");
                         this.addTotal(total_list, add_total_list);
@@ -480,7 +480,10 @@ function AntForest(robot, options) {
         var today = date.toDateString();
         var max_time = today + " " + this.options.max_time;
         var max_timestamp = Date.parse(max_time);
-        return (this.start_time > max_timestamp);
+        var min_time = today + " " + this.options.min_time;
+        var min_timestamp = Date.parse(min_time);
+        var now = date.getTime();
+        return (now < min_timestamp) || (max_timestamp <= now);
     };
 
     this.notifyTasker = function (time) {
@@ -548,15 +551,12 @@ function AntForest(robot, options) {
         var max_timestamp = Date.parse(today + " " + max_time);
         var now = date.getTime();
         
-        if ((min_timestamp <= now) && (now <= max_timestamp)) {
+        if ((min_timestamp <= now) && (now < max_timestamp)) {
             toastLog("开始检测剩余能量");
-            var millisecond = max_timestamp - now;
-            var step_time = 0;
-            var use_time = step_time + 156 * len;
-            for (var i = 0;i <= millisecond;i += use_time) {
+            while ((new Date()).getTime() < max_timestamp) {
                 this.robot.clickMulti(list);
 
-                sleep(step_time);
+                sleep(1000);
             }
             this.autoBack();
             
