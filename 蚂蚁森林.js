@@ -202,14 +202,8 @@ function AntForest(robot, options) {
                 return;
             } else {
                 times++;
-                this.back();
-                sleep(1500);
-                this.back();
-                sleep(1500);
-                this.back();
-                sleep(1500);
-                this.back();
-                sleep(1500);
+                this.killAlipay();
+                sleep(5000 + 500 * times);
                 this.openApp();
             }
         } while (times < this.options.max_retry_times);
@@ -495,6 +489,13 @@ function AntForest(robot, options) {
             }
         });
         log("已发送Tasker任务：" + time);
+    };
+
+    this.killAlipay = function () {
+        app.sendBroadcast({
+            action: "net.dinglisch.android.tasker.ActionCodes.KILL_APP"
+        });
+        log("已发送Tasker任务：杀死应用");
     };
 
     /**
