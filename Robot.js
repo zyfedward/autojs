@@ -17,6 +17,7 @@ function LollipopRobot(max_retry_times) {
     this.clickMulti = function (points) {
         points.forEach(function (point) {
             this.click(point[0], point[1]);
+            sleep(500);
         }.bind(this));
     };
 }
@@ -60,6 +61,7 @@ function NougatRobot(max_retry_times) {
         }); */
         points.forEach(function (point) {
             this.click(point[0], point[1]);
+            sleep(500);
         }.bind(this));
     };
 }
