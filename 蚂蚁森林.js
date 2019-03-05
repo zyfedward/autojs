@@ -113,7 +113,7 @@ function TaskManager() {
             // 监听音量上键
             events.observeKey();
             events.onceKeyDown("volume_up", function (event) {
-                engines.stopAll();
+                engines.stopAllAndToast();
                 exit();
             });
         });
@@ -121,7 +121,10 @@ function TaskManager() {
             // 监听Toast
             events.observeToast();
             events.onToast(function(toast){
-                var time = toast.getText().match(/^(\d{2})：(\d{2})后才能收取$/);
+                var text = toast.getText();
+                log(text);
+
+                var time = text.match(/^(\d{2})：(\d{2})后才能收取$/);
                 if (time != null && time.length == 3) {
                     var hour = parseInt(time[1]);
                     var minute = parseInt(time[2]);
