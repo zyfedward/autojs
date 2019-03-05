@@ -89,7 +89,13 @@ function TaskManager() {
 
         var task_list = this.getTaskList();
         this.task_no = this.findIndex(engines.myEngine(), task_list);
-        log(Object.keys(task_list));
+        log("Task: " + this.task_no + ", Tasks: " + Object.keys(task_list));
+
+        if (engines.all().length > 1)
+        {
+            log("Force stop current task");
+            engines.myEngine().forceStop();
+        }
     };
 
     this.getTaskList = function () {
