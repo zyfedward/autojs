@@ -11,6 +11,7 @@ var options = Object.assign({
     password: "",
     pattern_size: 3
 }, config); // 用户配置合并
+var minuteListGlobal = [];
 
 // 所有操作都是竖屏
 const WIDTH = Math.min(device.width, device.height);
@@ -114,6 +115,20 @@ function TaskManager() {
             events.onceKeyDown("volume_up", function (event) {
                 engines.stopAll();
                 exit();
+            });
+        });
+        threads.start(function () {
+            // 监听Toast
+            events.observeToast();
+            events.onToast(function(toast){
+                var time = toast.getText().match(/^(\d{2})：(\d{2})后才能收取$/);
+                if (time != null && time.length == 3) {
+                    var hour = parseInt(time[1]);
+                    var minute = parseInt(time[2]);
+                    if (hour == 0 && minute > 0) {
+                        minuteListGlobal.push(minute);
+                    }
+                }
             });
         });
     };
@@ -437,7 +452,7 @@ function AntForest(robot, options) {
         descMatches(/\d+’/).find().forEach(function (o) {
             minuteList.push(parseInt(o.contentDescription));
         });
-        return minuteList;
+        return minuteList.concat(minuteListGlobal);
     };
 
     this.filterMinuteList = function (minuteList) {
@@ -458,7 +473,7 @@ function AntForest(robot, options) {
     this.getTimeList = function (minuteList) {
         var date = new Date();
         var timeList = [];
-        var timestamp = date.getTime() - 20000;
+        var timestamp = date.getTime();
         for (var i = 0, len = minuteList.length; i < len; i++) {
             var minute = minuteList[i];
             var now = timestamp + minute * 60 * 1000;
