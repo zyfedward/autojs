@@ -14,10 +14,13 @@ function LollipopRobot(max_retry_times) {
         return (shell("input swipe " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + duration, true).code === 0);
     };
 
-    this.clickMulti = function (points) {
+    this.clickMulti = function (points, check) {
         points.forEach(function (point) {
             this.click(point[0], point[1]);
             sleep(500);
+
+            if (check != null)
+                check();
         }.bind(this));
     };
 }
@@ -46,7 +49,7 @@ function NougatRobot(max_retry_times) {
         return swipe(x1, y1, x2, y2, duration);
     };
 
-    this.clickMulti = function (points) {
+    this.clickMulti = function (points, check) {
         /* var list = [];
         var duration = 1;
         var max_point = 10; // 最多触摸点数
@@ -62,6 +65,9 @@ function NougatRobot(max_retry_times) {
         points.forEach(function (point) {
             this.click(point[0], point[1]);
             sleep(500);
+
+            if (check != null)
+                check();
         }.bind(this));
     };
 }
@@ -95,17 +101,17 @@ function Robot(max_retry_times) {
         shell("am force-stop " + package_name, true);
     };
 
-    this.clickMultiCenter = function (collection) {
+    this.clickMultiCenter = function (collection, check) {
         var points = [];
         collection.forEach(function(o) {
             var rect = o.bounds();
             points.push([rect.centerX(), rect.centerY()]);
         });
-        this.robot.clickMulti(points);
+        this.robot.clickMulti(points, check);
     };
 
-    this.clickMulti = function (points) {
-        this.robot.clickMulti(points);
+    this.clickMulti = function (points, check) {
+        this.robot.clickMulti(points, check);
     };
 }
 

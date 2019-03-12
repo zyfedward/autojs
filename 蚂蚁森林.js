@@ -536,9 +536,17 @@ function AntForest(robot, options) {
         log("找到" + num + "个能量球");
         sleep(100 * num);
 
-        this.robot.clickMultiCenter(filters);
+        this.robot.clickMultiCenter(filters, this.check);
         
         this.autoBack();
+    };
+
+    this.check = function () {
+        if (className("android.widget.Button").desc("关闭蒙层").exists())
+        {
+            className("android.widget.Button").desc("关闭蒙层").findOne().click();
+            sleep(500);
+        }
     };
 
     this.autoBack = function () {
