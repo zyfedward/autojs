@@ -257,6 +257,16 @@ function AntForest(robot, options) {
         // 等待加载
         if (this.waitForLoading("种树")) {
             log("进入蚂蚁森林成功");
+        } else if (className("android.widget.Button").text("账号在其他设备登录").exists() ||
+            className("android.widget.TextView").text("账号在其他设备登录").exists() ||
+            className("android.widget.TextView").text("点击下方头像登录").exists() ||
+            className("android.widget.TextView").text("换个账号登录").exists() ||
+            className("android.widget.TextView").text("注册账号").exists() ||
+            className("android.widget.TextView").text("快速挂失").exists() ||
+            className("android.widget.TextView").text("刷脸登录").exists() ||
+            className("android.widget.TextView").text("换个方式登录").exists()) {
+            log("Login needed, force stop");
+            engines.myEngine().forceStop();
         } else {
             toastLog("进入蚂蚁森林失败");
             return false;
