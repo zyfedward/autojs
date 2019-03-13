@@ -306,7 +306,7 @@ function AntForest(robot, options) {
         log("当前能量：" + startPower);
 
         // 开始收取
-        this.take();
+        this.take(this.check);
         this.takeRemain(this.getRemainList(), this.options.min_time, this.options.max_time);
         sleep(500);
 
@@ -535,7 +535,7 @@ function AntForest(robot, options) {
     /**
      * 收取能量
      */
-    this.take = function () {
+    this.take = function (check) {
         var filters = className("android.widget.Button").filter(function (o) {
             var desc = o.contentDescription;
             
@@ -546,14 +546,17 @@ function AntForest(robot, options) {
         log("找到" + num + "个能量球");
         sleep(100 * num);
 
-        this.robot.clickMultiCenter(filters, this.check);
+        this.robot.clickMultiCenter(filters, check);
         
         this.autoBack();
     };
 
     this.check = function () {
-        if (className("android.widget.Button").desc("关闭蒙层").exists())
-        {
+        sleep(1500);
+        if (className("android.widget.TextView").desc("返回").exists()) {
+            className("android.widget.TextView").desc("返回").findOne().click();
+            sleep(1500);
+        } else if (className("android.widget.Button").desc("关闭蒙层").exists()) {
             className("android.widget.Button").desc("关闭蒙层").findOne().click();
             sleep(500);
         }
